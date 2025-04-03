@@ -1,5 +1,6 @@
 <script setup>
 import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
+import { computed } from 'vue';
 
 function smoothScroll(id) {
     document.body.click();
@@ -11,6 +12,12 @@ function smoothScroll(id) {
         });
     }
 }
+
+const showUnderConstructionAlert = () => {
+    alert('This is under construction');
+};
+
+const hasToken = computed(() => !!localStorage.getItem('token'));
 </script>
 
 <template>
@@ -57,8 +64,10 @@ function smoothScroll(id) {
             </li>
         </ul>
         <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2">
-            <Button label="Login" text as="router-link" to="/auth/login" rounded></Button>
-            <Button label="Register" to="/auth/login" rounded></Button>
+            <Button v-if="!hasToken" label="Login" text as="router-link" to="/auth/login" rounded></Button>
+            <Button v-if="!hasToken" label="Register" as="router-link" to="/auth/register" rounded></Button>
+            <Button v-if="hasToken" label="Logout" as="router-link" to="" rounded @click.prevent="showUnderConstructionAlert"></Button>
+
             <FloatingConfigurator />
         </div>
 
