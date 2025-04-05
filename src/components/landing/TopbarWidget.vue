@@ -1,6 +1,8 @@
 <script setup>
-import FloatingConfigurator from "@/components/FloatingConfigurator.vue";
-import { computed } from 'vue';
+import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
+import { computed, ref } from 'vue';
+import { logout } from '@/service/authService';
+import router from '@/router';
 
 function smoothScroll(id) {
     document.body.click();
@@ -13,9 +15,20 @@ function smoothScroll(id) {
     }
 }
 
-const showUnderConstructionAlert = () => {
-    alert('This is under construction');
-};
+const isLoggingOut = ref(false);
+
+async function handleLogout() {
+    if (isLoggingOut.value) return;
+
+    isLoggingOut.value = true;
+    try {
+        await logout();
+        localStorage.removeItem('token');
+        await router.push('/auth/login');
+    } catch (error) {
+        console.error('Error logging out', error);
+    }
+}
 
 const hasToken = computed(() => !!localStorage.getItem('token'));
 </script>
@@ -66,10 +79,19 @@ const hasToken = computed(() => !!localStorage.getItem('token'));
         <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2">
             <Button v-if="!hasToken" label="Login" text as="router-link" to="/auth/login" rounded></Button>
             <Button v-if="!hasToken" label="Register" as="router-link" to="/auth/register" rounded></Button>
-            <Button v-if="hasToken" label="Logout" as="router-link" to="" rounded @click.prevent="showUnderConstructionAlert"></Button>
+            <Button v-if="hasToken" label="Logout" :disabled="isLoggingOut" :class="{ 'disabled-button': isLoggingOut }" as="router-link" to="" rounded @click="handleLogout" />
 
             <FloatingConfigurator />
         </div>
 
     </div>
 </template>
+
+<style scoped>
+.disabled-button {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    transition: none;
+}
+</style>

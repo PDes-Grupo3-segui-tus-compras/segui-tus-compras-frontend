@@ -1,20 +1,47 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { ref } from 'vue';
-import axios from 'axios';
+import { computed, ref } from 'vue';
+import router from '@/router';
+import { login } from '@/service/authService';
+import BasicInput from '@/components/BasicInput.vue';
 
+// Attributes
 const email = ref('');
 const password = ref('');
 
-const handleLogin = async () => {
-    //TODO: Esto hay que cambiarlo, es simplemente una prueba de concepto para ver que funcione bien la conexion.
-    const response = await axios.post('http://localhost:8000/api/login', {
-        email: email.value,
-        password: password.value
-    })
+// Error handling
+const passwordTouched = ref(false);
+const backendErrorMessage = ref('');
+const defaultErrors = {
+    email: [],
+    password: []
+};
+const errors = computed(() => {
+    if (backendErrorMessage.value) return defaultErrors;
 
-    console.log(response);
-}
+    return {
+        email: !email.value ? ['Email is required'] : [],
+        password: !password.value ? ['Password is required'] : []
+    };
+});
+
+const handleLogin = async () => {
+    backendErrorMessage.value = '';
+    if (Object.values(errors.value).some((errArray) => errArray.length > 0)) return;
+
+    try {
+        const response = await login({
+            email: email.value,
+            password: password.value
+        });
+        localStorage.setItem('token', response.token);
+        await router.push('/');
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            backendErrorMessage.value = 'Incorrect email or password';
+        }
+    }
+};
 </script>
 
 <template>
@@ -41,17 +68,19 @@ const handleLogin = async () => {
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to Follow Your Purchases!</div>
                         <span class="text-muted-color font-medium">Sign in to continue</span>
                     </div>
 
                     <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                        <BasicInput v-model="email" type="email" label="Email" placeholder="Email" :errors="errors.email" />
+                        <label for="password" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mt-4 mb-2">Password</label>
+                        <Password id="password" v-model="password" placeholder="Password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="passwordTouched = true"     />
+                        <p v-if="errors.password.length && passwordTouched" class="text-red-500 text-sm">{{ errors.password.join(', ') }}</p>
 
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-10" fluid :feedback="false"></Password>
-                        <Button label="Sign In" class="w-full" @click="handleLogin"></Button>
+                        <Button label="Login" class="w-full mt-5" @click="handleLogin"></Button>
+
+                        <p v-if="backendErrorMessage" class="text-red-500 text-center text-sm mt-4">{{ backendErrorMessage }}</p>
                     </div>
                     <div class="mt-4 text-center">
                         <span class="text-muted-color">Do you not have an account?</span>
@@ -64,13 +93,4 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-.pi-eye {
-    transform: scale(1.6);
-    margin-right: 1rem;
-}
-
-.pi-eye-slash {
-    transform: scale(1.6);
-    margin-right: 1rem;
-}
 </style>
