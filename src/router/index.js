@@ -6,7 +6,8 @@ const router = createRouter({
         {
             path: '/',
             name: 'landing',
-            component: () => import('@/views/pages/Landing.vue')
+            component: () => import('@/views/pages/Landing.vue'),
+            meta: { requiresAuth: true }
         },
         {
             path: '/pages/notfound',
@@ -17,12 +18,14 @@ const router = createRouter({
         {
             path: '/auth/login',
             name: 'login',
-            component: () => import('@/views/pages/auth/Login.vue')
+            component: () => import('@/views/pages/auth/Login.vue'),
+            meta: { guestOnly: true }
         },
         {
             path: '/auth/register',
             name: 'register',
-            component: () => import('@/views/pages/auth/Register.vue')
+            component: () => import('@/views/pages/auth/Register.vue'),
+            meta: { guestOnly: true }
         },
         {
             path: '/auth/access',
@@ -33,8 +36,26 @@ const router = createRouter({
             path: '/auth/error',
             name: 'error',
             component: () => import('@/views/pages/auth/Error.vue')
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: '/'
         }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    const guestOnly = to.matched.some((record) => record.meta.guestOnly);
+    const token = localStorage.getItem('token');
+
+    if (requiresAuth && !token) {
+        next({ name: 'login' });
+    } else if (guestOnly && token) {
+        next({ name: 'landing' });
+    } else {
+        next();
+    }
 });
 
 export default router;
