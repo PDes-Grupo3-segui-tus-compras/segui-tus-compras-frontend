@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
 import { searchProducts } from '@/service/mercadoLibreService';
+import { ref } from 'vue';
 
 const searchText = ref('');
 const productList = ref([]);
@@ -50,8 +50,13 @@ const handleSearch = async () => {
                                             </div>
                                         </div>
                                         <div class="flex gap-2">
-                                            <Button label="Details" class="flex-auto whitespace-nowrap"></Button>
-                                        </div>
+                                            <router-link
+                                                :to="`/products/${item.id}`"
+                                                class="flex-auto whitespace-nowrap"
+                                                >
+                                                <Button label="Details"> </Button>
+                                            </router-link>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
