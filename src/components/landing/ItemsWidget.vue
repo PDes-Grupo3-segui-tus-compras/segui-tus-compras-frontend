@@ -1,6 +1,7 @@
 <script setup>
 import { searchProducts } from '@/service/mercadoLibreService';
 import { ref } from 'vue';
+import router from '@/router';
 
 const searchText = ref('');
 const productList = ref([]);
@@ -8,16 +9,24 @@ const backendErrorMessage = ref('');
 
 const handleSearch = async () => {
     backendErrorMessage.value = '';
+    isLoading.value = true;
+    productList.value = [];
     try {
-        productList.value = await searchProducts({
-            q: searchText.value
-        });
+        productList.value = await searchProducts({ q: searchText.value });
     } catch (error) {
         if (error.response) {
             backendErrorMessage.value = 'Something went wrong searching for products, try again later';
         }
+    } finally {
+        isLoading.value = false;
     }
 };
+
+function goToProduct(productId) {
+    router.push(`/products/${productId}`);
+}
+
+const isLoading = ref(false);
 </script>
 <template>
     <div id="items-for-sale" class="py-6 px-6 lg:px-20 mt-8 mx-0 lg:mx-20">
@@ -49,20 +58,27 @@ const handleSearch = async () => {
                                                 {{ item.name }}
                                             </div>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <router-link
-                                                :to="`/products/${item.id}`"
-                                                class="flex-auto whitespace-nowrap"
-                                                >
-                                                <Button label="Details"> </Button>
-                                            </router-link>
-                                            </div>
+                                        <Button label="Details" class="h-[2.5rem] w-[10rem] text-base self-center" @click="goToProduct(item.id)" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </template>
                 </DataView>
+                <div v-if="isLoading" class="grid grid-cols-12 gap-4">
+                    <div v-for="n in 10" :key="n" class="col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3 p-2">
+                        <div class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
+                            <Skeleton width="100%" height="20rem" class="rounded" />
+                            <div class="flex flex-col justify-between flex-grow mt-6">
+                                <div class="mb-6">
+                                    <Skeleton width="80%" height="1.25rem" class="mb-2" />
+                                    <Skeleton width="60%" height="1rem" />
+                                </div>
+                                <Skeleton width="10rem" height="2.5rem" class="self-center rounded" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
