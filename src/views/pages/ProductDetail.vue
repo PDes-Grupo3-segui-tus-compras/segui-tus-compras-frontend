@@ -1,7 +1,30 @@
 <script setup>
-import { ref } from 'vue';
-import 'primeicons/primeicons.css';
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
+import { getProductById } from '@/service/mercadoLibreService';
+import 'primeicons/primeicons.css';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const product = ref(null);
+const isLoading = ref(true);
+const errorMessage = ref('');
+
+onMounted(async () => {
+    const productId = route.params.id
+
+    try {
+        isLoading.value = true;
+        product.value = await getProductById({product_id: productId});
+    } catch (error) {
+        console.error(error);
+        errorMessage.value = 'Error loading product.';
+    } finally {
+        isLoading.value = false;
+        console.log("product.value");
+        console.log(product.value);
+    }
+});
 
 const images = ref([
     {
@@ -119,39 +142,45 @@ const galleriaResponsiveOptions = ref([
     <div class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between relative lg:static">
         <TopbarWidget />
     </div>
-    <div class="min-h-screen bg-surface-ground text-color flex justify-center items-start py-10 px-4">
-        <div class="card border-1 surface-border border-round-xl w-full max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="card">
-                <Galleria :value="images" :responsiveOptions="galleriaResponsiveOptions" :numVisible="5" containerStyle="max-width: 640px">
-                    <template #item="slotProps">
-                        <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
-                    </template>
-                </Galleria>
-            </div>
-            <div class="flex flex-col gap-4 px-4">
-                <h1 class="text-3xl md:text-4xl font-semibold pl-2 pt-[2rem]">Caída de Leviatán, La. Expanse 9 - James S. A. Corey</h1>
-                <div class="flex items-center text-base md:text-lg text-green-600 gap-2">
-                    <i class="pi pi-check-circle text-green-500"></i>
-                    Nuevo · +5 vendidos
+    <div v-if="!isLoading">
+        <div class="min-h-screen bg-surface-ground text-color flex justify-center items-start py-10 px-4">
+            <div class="card border-1 surface-border border-round-xl w-full max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card">
+                    <Galleria :value="product.pictures" :responsiveOptions="galleriaResponsiveOptions" :numVisible="5" containerStyle="max-width: 640px" class="mt-2rem">
+                        <template #item="slotProps">
+                            <div style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center">
+                                <img :src="slotProps.item.url" style="max-width: 100%; max-height: 100%; object-fit: contain; padding-top: 10px;"
+                                />
+                            </div>
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <img :src="slotProps.item.url" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px" />
+                        </template>
+                    </Galleria>
                 </div>
-                <div class="text-4xl md:text-5xl font-bold text-green-700 flex items-center gap-2">
-                    <i class="pi pi-tag"></i>
-                    $32.740
-                </div>
-                <div class="text-base md:text-lg text-gray-600">en 6 cuotas de $7.254,64</div>
-                <div class="text-sm md:text-base text-gray-500 flex items-center gap-2">
-                    <i class="pi pi-barcode"></i>
-                    ISBN: 09788418034744
-                </div>
+                <div class="flex flex-col gap-4 px-4">
+                    <h1 class="text-3xl md:text-4xl font-semibold pl-2 pt-[2rem]">{{product.name}}</h1>
+                    <div class="flex items-center text-base md:text-lg text-green-600 gap-2">
+                        <i class="pi pi-check-circle text-green-500"></i>
+                        Nuevo · +5 vendidos
+                    </div>
+                    <div class="text-4xl md:text-5xl font-bold text-green-700 flex items-center gap-2">
+                        <i class="pi pi-tag"></i>
+                        {{product.price}}
+                    </div>
+                    <div class="text-base md:text-lg text-gray-600">en 6 cuotas de $7.254,64</div>
+                    <div class="text-sm md:text-base text-gray-500 flex items-center gap-2">
+                        <i class="pi pi-barcode"></i>
+                        ISBN: 09788418034744
+                    </div>
 
-                <div class="mt-8 flex flex-col gap-3 items-center">
-                    <Button label="⚡ Buy Now" class="h-[2.5rem] w-[17rem] text-base md:text-lg" />
-                    <Button label="🛒 Add to Cart" severity="secondary" outlined class="h-[2.5rem] w-[17rem] text-base md:text-lg" />
+                    <div class="mt-8 flex flex-col gap-3 items-center">
+                        <Button label="⚡ Buy Now" class="h-[2.5rem] w-[17rem] text-base md:text-lg" />
+                        <Button label="🛒 Add to Cart" severity="secondary" outlined class="h-[2.5rem] w-[17rem] text-base md:text-lg" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
