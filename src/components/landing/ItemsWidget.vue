@@ -6,10 +6,12 @@ import router from '@/router';
 const searchText = ref('');
 const productList = ref([]);
 const backendErrorMessage = ref('');
+const noProductsFound = ref(false);
 
 const handleSearch = async () => {
     backendErrorMessage.value = '';
     isLoading.value = true;
+    noProductsFound.value = false;
     productList.value = [];
     try {
         productList.value = await searchProducts({ q: searchText.value });
@@ -19,6 +21,7 @@ const handleSearch = async () => {
         }
     } finally {
         isLoading.value = false;
+        noProductsFound.value = productList.value.length === 0;
     }
 };
 
@@ -38,6 +41,7 @@ const isLoading = ref(false);
                     <InputText type="text" v-model="searchText" placeholder="Keyword" />
                 </InputGroup>
                 <p v-if="backendErrorMessage" class="col-start-3 col-span-8 text-red-500 text-sm">{{ backendErrorMessage }}</p>
+                <p v-if="noProductsFound" class="col-start-3 col-span-8 text-gray-500 text-lg">No items found!</p>
             </div>
         </div>
         <div class="flex flex-col">
@@ -79,6 +83,7 @@ const isLoading = ref(false);
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
