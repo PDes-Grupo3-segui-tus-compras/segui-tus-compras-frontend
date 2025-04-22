@@ -9,6 +9,14 @@ const router = createRouter({
             component: () => import('@/views/pages/Landing.vue'),
             meta: { requiresAuth: true }
         },
+
+        {
+            path: '/products/:id',
+            name: 'productDetail',
+            component: () => import('@/views/pages/ProductDetail.vue'),
+            meta: { requiresAuth: true }
+        },
+
         {
             path: '/pages/notfound',
             name: 'notfound',
@@ -21,12 +29,14 @@ const router = createRouter({
             component: () => import('@/views/pages/auth/Login.vue'),
             meta: { guestOnly: true }
         },
+
         {
             path: '/auth/register',
             name: 'register',
             component: () => import('@/views/pages/auth/Register.vue'),
             meta: { guestOnly: true }
         },
+
         {
             path: '/auth/access',
             name: 'accessDenied',

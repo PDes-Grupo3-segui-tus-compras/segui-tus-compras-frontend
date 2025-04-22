@@ -2,16 +2,15 @@
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { computed, ref } from 'vue';
 import { logout } from '@/service/authService';
-import router from '@/router';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 
 function smoothScroll(id) {
-    document.body.click();
     const element = document.getElementById(id);
     if (element) {
-        element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+        element.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
@@ -30,12 +29,24 @@ async function handleLogout() {
     }
 }
 
+function goToSection(sectionId) {
+    if (route.path !== '/') {
+        router.push({ path: '/', query: { scrollTo: sectionId } });
+    } else {
+        smoothScroll(sectionId);
+    }
+}
+
+function goHome() {
+    router.push('/');
+}
+
 const hasToken = computed(() => !!localStorage.getItem('token'));
 </script>
 
 <template>
-    <a class="flex items-center" href="#">
-        <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-12 mr-2">
+    <a class="flex items-center" @click="goHome">
+        <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-12 mr-2 cursor-pointer transition-transform duration-200 hover:scale-105 hover:opacity-90 active:scale-95 select-none">
             <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -63,15 +74,15 @@ const hasToken = computed(() => !!localStorage.getItem('token'));
     >
         <i class="pi pi-bars !text-2xl"></i>
     </Button>
-    <div class="items-center bg-surface-0 dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
+    <div class="items-center bg-surface-0 bg-transparent grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
         <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8">
             <li>
-                <a @click="smoothScroll('hero')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                <a @click="goToSection('hero')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                     <span>Home</span>
                 </a>
             </li>
             <li>
-                <a @click="smoothScroll('items-for-sale')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                <a @click="goToSection('items-for-sale')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                     <span>Items</span>
                 </a>
             </li>
@@ -83,7 +94,6 @@ const hasToken = computed(() => !!localStorage.getItem('token'));
 
             <FloatingConfigurator />
         </div>
-
     </div>
 </template>
 

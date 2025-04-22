@@ -6,8 +6,9 @@
     >
         <div class="mx-6 md:mx-20 mt-0 md:mt-6">
             <h1 class="text-6xl font-bold text-gray-900 leading-tight">Track & Shop with Ease</h1>
-            <p class="font-normal text-2xl leading-normal md:mt-4 text-gray-700">Follow your purchases in real time and shop smarter with <span class="font-bold text-gray-900 leading-tight">Follow Your Purchases</span>. Stay updated, stay in control! </p>
-            <Button label="Get Started" as="router-link" to="/" rounded class="!text-xl mt-8 !px-4"></Button>
+            <p class="font-normal text-2xl leading-normal md:mt-4 text-gray-700">
+                Follow your purchases in real time and shop smarter with <span class="font-bold text-gray-900 leading-tight">Follow Your Purchases</span>. Stay updated, stay in control!
+            </p>
         </div>
         <div class="flex justify-center md:justify-end">
             <img src="https://www.leadsquared.com/wp-content/uploads/2020/04/Sales-tracking.png" alt="Hero Image" class="w-9/12 md:w-auto" />
