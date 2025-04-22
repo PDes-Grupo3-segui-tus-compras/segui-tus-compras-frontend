@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import ItemsWidget from '@/components/landing/ItemsWidget.vue';
 import FooterWidget from '@/components/landing/FooterWidget.vue';
 import HeroWidget from '@/components/landing/HeroWidget.vue';
+import ItemsWidget from '@/components/landing/ItemsWidget.vue';
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
-import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
