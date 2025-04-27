@@ -23,6 +23,7 @@ async function handleLogout() {
     try {
         await logout();
         localStorage.removeItem('token');
+        localStorage.removeItem('permission');
         await router.push('/auth/login');
     } catch (error) {
         console.error('Error logging out', error);
@@ -42,6 +43,7 @@ function goHome() {
 }
 
 const hasToken = computed(() => !!localStorage.getItem('token'));
+const isAdmin = computed(() => localStorage.getItem('permission') === 'admin');
 </script>
 
 <template>
@@ -84,6 +86,11 @@ const hasToken = computed(() => !!localStorage.getItem('token'));
             <li>
                 <a @click="goToSection('items-for-sale')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                     <span>Items</span>
+                </a>
+            </li>
+            <li>
+                <a v-if="isAdmin" href="#" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
+                    <span>Admin</span>
                 </a>
             </li>
         </ul>
