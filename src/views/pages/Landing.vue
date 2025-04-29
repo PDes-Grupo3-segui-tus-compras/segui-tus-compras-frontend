@@ -24,10 +24,12 @@ onMounted(() => {
 <template>
     <div class="bg-surface-0 dark:bg-surface-900">
         <div id="home" class="landing-wrapper overflow-hidden">
-            <div class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between relative lg:static">
-                <TopbarWidget />
+            <div class="fixed top-0 left-0 w-full z-50 bg-surface-0 dark:bg-surface-900 shadow-md">
+                <div class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between">
+                    <TopbarWidget />
+                </div>
             </div>
-            <HeroWidget />
+            <HeroWidget class="mt-[96px]" />
             <ItemsWidget />
             <FooterWidget />
         </div>

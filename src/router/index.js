@@ -42,14 +42,22 @@ const router = createRouter({
             name: 'accessDenied',
             component: () => import('@/views/pages/auth/Access.vue')
         },
+
         {
             path: '/auth/error',
             name: 'error',
             component: () => import('@/views/pages/auth/Error.vue')
         },
+
         {
             path: '/:pathMatch(.*)*',
             redirect: '/'
+        },
+
+        {
+            path: '/auth/admin',
+            name: 'accessDenied',
+            component: () => import('@/views/pages/auth/Admin.vue')
         }
     ]
 });
