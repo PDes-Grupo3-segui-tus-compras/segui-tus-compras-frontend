@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
-import TopbarWidget from '@/components/landing/TopbarWidget.vue';
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
+import TopbarWidget from '@/components/landing/TopbarWidget.vue';
+import { ref } from 'vue';
 
 const layout = ref('list');
 /* Data for dev process only (MOCK) */
@@ -16,8 +16,8 @@ const resultsTop5 = [product, product, product, product, product];
             <TopbarWidget />
         </div>
     </div>
-    <div class="flex flex-col">
-        <div class="card">
+    <div class="flex flex-col pt-10" >
+        <div class="card" >
             <div class="font-semibold text-xl">Top 5 Products</div>
             <DataView :value="resultsTop5" :layout="layout">
                 <template #list="slotProps">
