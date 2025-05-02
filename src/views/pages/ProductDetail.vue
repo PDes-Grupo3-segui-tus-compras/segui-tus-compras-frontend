@@ -1,7 +1,10 @@
 <script setup>
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
 import { getProductById } from '@/service/mercadoLibreService';
+import { purchaseProduct } from '@/service/productService';
 import 'primeicons/primeicons.css';
+import { useConfirm } from 'primevue/useconfirm';
+import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -10,9 +13,11 @@ const product = ref(null);
 const isLoading = ref(true);
 const errorMessage = ref('');
 
+const toast = useToast();
+const confirmPopup = useConfirm();
+
 onMounted(async () => {
     const productId = route.params.id
-
     try {
         isLoading.value = true;
         product.value = await getProductById({product_id: productId});
@@ -44,6 +49,49 @@ const galleriaResponsiveOptions = ref([
         numVisible: 1
     }
 ]);
+
+const handlePurchase = async () => {
+    try{const response = await purchaseProduct(
+        {
+        catalog_product_id: product.catalog_product_id,
+        name: product.name,
+        image: product.pictures[0].url,
+        short_description: product.short_description,
+        quantity: 1,
+        price: product.price
+        });
+        toast.add({ severity: 'info', summary: 'Success', detail: 'Product succesfully purchased', life: 3000 })
+    ;}
+    catch (error) {
+        if (error.response && error.response.status === 400) {
+            backendErrorMessage.value = 'Algo paso';
+            toast.add({ severity: 'error', summary: 'Failure', detail: 'Something went wrong try again later', life: 3000 });
+        }
+    }
+    
+
+};
+
+function confirm(event) {
+    confirmPopup.require({
+        target: event.target,
+        message: 'Are you sure you want to proceed?',
+        icon: 'pi pi-exclamation-triangle',
+        rejectProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Buy'
+        },
+        accept: () => {
+            handlePurchase()
+        },
+        reject: () => {
+        }
+    });
+}
 </script>
 
 <template>
@@ -98,7 +146,8 @@ const galleriaResponsiveOptions = ref([
                         </ul>
                     </div>
                     <div class="flex flex-col gap-3 items-center">
-                        <Button label="⚡ Buy Now" class="h-[2.5rem] w-[17rem] text-base md:text-lg" />
+                        <ConfirmPopup></ConfirmPopup>
+                        <Button label="⚡ Buy Now" class="h-[2.5rem] w-[17rem] text-base md:text-lg" @click="confirm($event)" />
                     </div>
                 </div>
             </div>
