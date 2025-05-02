@@ -1,7 +1,7 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { computed, ref } from 'vue';
 import { logout } from '@/service/authService';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -23,6 +23,7 @@ async function handleLogout() {
     try {
         await logout();
         localStorage.removeItem('token');
+        localStorage.removeItem('permission');
         await router.push('/auth/login');
     } catch (error) {
         console.error('Error logging out', error);
@@ -41,7 +42,12 @@ function goHome() {
     router.push('/');
 }
 
+function goToAdmin() {
+    router.push(`/admin/`);
+}
+
 const hasToken = computed(() => !!localStorage.getItem('token'));
+const isAdmin = computed(() => localStorage.getItem('permission') === 'admin');
 </script>
 
 <template>
@@ -84,6 +90,11 @@ const hasToken = computed(() => !!localStorage.getItem('token'));
             <li>
                 <a @click="goToSection('items-for-sale')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                     <span>Items</span>
+                </a>
+            </li>
+            <li>
+                <a v-if="isAdmin" href="#" @click="goToAdmin()" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
+                    <span>Admin</span>
                 </a>
             </li>
         </ul>

@@ -42,11 +42,34 @@ const router = createRouter({
             name: 'accessDenied',
             component: () => import('@/views/pages/auth/Access.vue')
         },
+
         {
             path: '/auth/error',
             name: 'error',
             component: () => import('@/views/pages/auth/Error.vue')
         },
+
+        {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/views/pages/admin/Admin.vue'),
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/admin/users',
+            name: 'users',
+            component: () => import('@/views/pages/admin/Users.vue'),
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/admin/metrics',
+            name: 'metrics',
+            component: () => import('@/views/pages/admin/Metrics.vue'),
+            meta: { requiresAuth: true }
+        },
+
         {
             path: '/:pathMatch(.*)*',
             redirect: '/'
