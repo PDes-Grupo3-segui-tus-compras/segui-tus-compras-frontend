@@ -43,7 +43,7 @@ function goHome() {
 }
 
 function goToAdmin() {
-    router.push(`/auth/admin/`);
+    router.push(`/admin/`);
 }
 
 const hasToken = computed(() => !!localStorage.getItem('token'));

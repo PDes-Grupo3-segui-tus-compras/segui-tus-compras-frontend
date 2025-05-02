@@ -50,14 +50,29 @@ const router = createRouter({
         },
 
         {
-            path: '/:pathMatch(.*)*',
-            redirect: '/'
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/views/pages/admin/Admin.vue'),
+            meta: { requiresAuth: true }
         },
 
         {
-            path: '/auth/admin',
-            name: 'accessDenied',
-            component: () => import('@/views/pages/auth/Admin.vue')
+            path: '/admin/users',
+            name: 'users',
+            component: () => import('@/views/pages/admin/Users.vue'),
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/admin/metrics',
+            name: 'metrics',
+            component: () => import('@/views/pages/admin/Metrics.vue'),
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: '/'
         }
     ]
 });
