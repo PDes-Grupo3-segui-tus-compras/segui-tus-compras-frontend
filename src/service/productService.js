@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axios';
 
 export const purchaseProduct = async (purchaseData) => {
     const response = await axios.post('/purchase', purchaseData);
