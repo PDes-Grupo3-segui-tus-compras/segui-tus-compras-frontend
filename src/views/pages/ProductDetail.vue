@@ -139,7 +139,7 @@ const favourite  = async (event) => {
                         <h1 class="hidden md:block text-3xl md:text-4xl font-semibold pl-2 pt-[2rem]">
                             {{ product.name }}
                         </h1>
-                        <Button type="button" :icon="product?.is_favourite ? 'pi pi-heart-fill' : 'pi pi-heart'" outlined :loading="awaitingResponse" @click="favourite($event)" style="height: 45px;width: 45px;"></Button>
+                        <Button type="button" :icon="product?.is_favourite ? 'pi pi-heart-fill' : 'pi pi-heart'" outlined :loading="awaitingResponse" @click="favourite($event)" style="min-height: 30px;min-width: 30px;max-height: 30px;max-width: 30px;"></Button>
                     </div>
                     <div class="text-4xl md:text-5xl font-bold text-green-700 flex items-center gap-2">
                         <i class="pi pi-tag"></i>
@@ -162,9 +162,9 @@ const favourite  = async (event) => {
                         </ul>
                     </div>
                     <div class="flex flex-col md:flex-row gap-6 md:gap-10">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 ">
                             <label for="qty" class="text-base font-medium">Quantity:</label>
-                            <InputNumber v-model="quantity" inputId="qty" showButtons buttonLayout="horizontal" :min="1" :max="99" decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary" />
+                            <InputNumber :inputStyle="{ maxWidth: '40px' }" v-model="quantity" inputId="qty" showButtons buttonLayout="horizontal" :min="1" :max="99" decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary" />
                         </div>
                         <div class="flex flex-col gap-3 items-center">
                             <ConfirmPopup></ConfirmPopup>
