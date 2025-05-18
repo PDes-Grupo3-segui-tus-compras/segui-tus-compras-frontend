@@ -24,6 +24,7 @@ async function handleLogout() {
         await logout();
         localStorage.removeItem('token');
         localStorage.removeItem('permission');
+        localStorage.removeItem('user');
         await router.push('/auth/login');
     } catch (error) {
         console.error('Error logging out', error);

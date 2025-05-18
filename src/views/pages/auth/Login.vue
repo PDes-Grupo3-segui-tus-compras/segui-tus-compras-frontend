@@ -36,6 +36,7 @@ const handleLogin = async () => {
         });
         localStorage.setItem('token', response.token);
         localStorage.setItem('permission', response.user.user_type);
+        localStorage.setItem('user', response.user.id);
         await router.push('/');
     } catch (error) {
         if (error.response && error.response.status === 401) {
