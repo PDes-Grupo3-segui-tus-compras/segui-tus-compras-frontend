@@ -1,12 +1,13 @@
 <script setup>
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
 import { getProductById } from '@/service/mercadoLibreService';
-import { favouriteProduct, purchaseProduct } from '@/service/productService';
+import { favouriteProduct, getProductDataToSend, purchaseProduct } from '@/service/productService';
 import 'primeicons/primeicons.css';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import ProductOpinionsCard from '@/components/ProductOpinionsCard.vue';
 
 const route = useRoute();
 const product = ref(null);
@@ -91,16 +92,11 @@ function confirm(event) {
     });
 };
 
-const favourite  = async (event) => {
+
+const favourite = async (event) => {
     awaitingResponse.value = true;
     try {
-        let response = await favouriteProduct({
-            catalog_product_id: product.value.catalog_product_id,
-            name: product.value.name,
-            image: product.value.pictures[0].url,
-            short_description: product.value.short_description,
-            price: product.value.price,
-        })
+        let response = await favouriteProduct(getProductDataToSend(product.value));
         product.value.is_favourite = ! product.value.is_favourite;
         toast.add({ severity: 'success', summary: 'Success', detail: response.message, life: 3000 });
         awaitingResponse.value = false;
@@ -108,7 +104,7 @@ const favourite  = async (event) => {
         console.error(error);
         toast.add({ severity: 'error', summary: 'Failure', detail: 'Something went wrong try again later', life: 3000 });
         awaitingResponse.value = false;
-    } 
+    }
 }
 </script>
 
@@ -117,7 +113,7 @@ const favourite  = async (event) => {
         <TopbarWidget />
     </div>
     <div v-if="!isLoading">
-        <div class="min-h-screen bg-surface-ground text-color flex justify-center items-start py-10 px-4">
+        <div class="bg-surface-ground text-color flex justify-center items-start py-10 px-4">
             <div class="card border-1 surface-border border-round-xl w-full max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-6">
                 <h1 class="block md:hidden text-2xl font-semibold text-center text-gray-900 dark:text-white mb-4">
                     {{ product.name }}
@@ -162,9 +158,19 @@ const favourite  = async (event) => {
                         </ul>
                     </div>
                     <div class="flex flex-col md:flex-row gap-6 md:gap-10">
-                        <div class="flex items-center gap-2 ">
+                        <div class="flex items-center gap-2">
                             <label for="qty" class="text-base font-medium">Quantity:</label>
-                            <InputNumber :inputStyle="{ maxWidth: '40px' }" v-model="quantity" inputId="qty" showButtons buttonLayout="horizontal" :min="1" :max="99" decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary" />
+                            <InputNumber
+                                :inputStyle="{ maxWidth: '40px' }"
+                                v-model="quantity"
+                                inputId="qty"
+                                showButtons
+                                buttonLayout="horizontal"
+                                :min="1"
+                                :max="99"
+                                decrementButtonClass="p-button-secondary"
+                                incrementButtonClass="p-button-secondary"
+                            />
                         </div>
                         <div class="flex flex-col gap-3 items-center">
                             <ConfirmPopup></ConfirmPopup>
@@ -174,5 +180,7 @@ const favourite  = async (event) => {
                 </div>
             </div>
         </div>
+        <ProductOpinionsCard v-if="!isLoading" :opinions="product.opinions ? product.opinions : []" :product="product" />
+        <div style="height: 10px"></div>
     </div>
 </template>
