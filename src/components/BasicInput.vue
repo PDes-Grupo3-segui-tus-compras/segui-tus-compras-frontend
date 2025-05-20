@@ -7,6 +7,7 @@ const props = defineProps({
     label: String,
     type: { type: String, default: 'text' },
     placeholder: String,
+    name: String,
     errors: { type: Array, default: () => [] }
 });
 
@@ -21,14 +22,7 @@ const showError = computed(() => touched.value && props.errors.length);
         <label class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">
             {{ label }}
         </label>
-        <InputText
-          class="w-full md:w-[30rem]"
-          :class="{ 'p-invalid': showError, 'mb-2': !showError }"
-          :placeholder="placeholder"
-          :value="modelValue"
-          @input="emit('update:modelValue', $event.target.value)"
-          @blur="touched = true"
-        />
+        <InputText class="w-full md:w-[30rem]" :class="{ 'p-invalid': showError, 'mb-2': !showError }" :placeholder="placeholder" :value="modelValue" :name="name" @input="emit('update:modelValue', $event.target.value)" @blur="touched = true" />
         <p v-if="showError" class="text-red-500 text-sm mt-1">
             {{ errors.join(', ') }}
         </p>

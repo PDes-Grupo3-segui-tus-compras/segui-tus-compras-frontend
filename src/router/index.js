@@ -53,21 +53,21 @@ const router = createRouter({
             path: '/admin',
             name: 'admin',
             component: () => import('@/views/pages/admin/Admin.vue'),
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true, adminOnly: true }
         },
 
         {
             path: '/admin/users',
             name: 'users',
             component: () => import('@/views/pages/admin/Users.vue'),
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true, adminOnly: true }
         },
 
         {
             path: '/admin/metrics',
             name: 'metrics',
             component: () => import('@/views/pages/admin/Metrics.vue'),
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true, adminOnly: true }
         },
 
         {
@@ -79,13 +79,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    const adminOnly = to.matched.some((record) => record.meta.adminOnly);
     const guestOnly = to.matched.some((record) => record.meta.guestOnly);
     const token = localStorage.getItem('token');
+    const permission = localStorage.getItem('permission');
 
     if (requiresAuth && !token) {
         next({ name: 'login' });
     } else if (guestOnly && token) {
         next({ name: 'landing' });
+    } else if(adminOnly && permission !== "admin") {
+        next({ name: 'accessDenied' });
     } else {
         next();
     }
