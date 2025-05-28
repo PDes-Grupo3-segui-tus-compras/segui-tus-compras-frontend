@@ -37,8 +37,8 @@ const isLoading = ref(false);
             <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">Items for sale</div>
             <div class="grid grid-cols-12">
                 <InputGroup class="col-start-3 col-span-8 mt-20 mb-6 text-center">
-                    <Button :disabled="!searchText.trim()" label="Search" @click="handleSearch" />
-                    <InputText type="text" v-model="searchText" placeholder="Keyword" />
+                    <Button name="search-button" :disabled="!searchText.trim()" label="Search" @click="handleSearch" />
+                    <InputText name="search-input" type="text" v-model="searchText" placeholder="Keyword" />
                 </InputGroup>
                 <p v-if="backendErrorMessage" class="col-start-3 col-span-8 text-red-500 text-sm">{{ backendErrorMessage }}</p>
                 <p v-if="noProductsFound" class="col-start-3 col-span-8 text-gray-500 text-lg">No items found!</p>
