@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FooterWidget from '@/components/landing/FooterWidget.vue';
 import HeroWidget from '@/components/landing/HeroWidget.vue';
 import ItemsWidget from '@/components/landing/ItemsWidget.vue';
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
@@ -31,7 +30,6 @@ onMounted(() => {
             </div>
             <HeroWidget class="mt-[96px]" />
             <ItemsWidget />
-            <FooterWidget />
         </div>
     </div>
 </template>
