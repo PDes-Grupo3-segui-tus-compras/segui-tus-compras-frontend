@@ -9,3 +9,7 @@ export const isCurrentUser = (userId) => {
 export const currentUserId = () => {
     return localStorage.getItem('user');
 };
+
+export const currentUserName = () => {
+    return localStorage.getItem('userName');
+};

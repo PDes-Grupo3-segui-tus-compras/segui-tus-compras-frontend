@@ -3,6 +3,7 @@ import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { logout } from '@/service/authService';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { currentUserId, currentUserName } from '@/service/localStorageService';
 
 const menu = ref(null);
 const route = useRoute();
@@ -11,12 +12,20 @@ const overlayMenuItems = ref([
     {
         label: 'My purchases',
         icon: 'pi pi-fw pi-shopping-cart',
-        command: () => router.push('/purchases')
+        command: () =>
+            router.push({
+                path: `/users/${currentUserId()}/purchases`,
+                query: { userName: currentUserName() }
+            })
     },
     {
         label: 'My Favourites',
         icon: 'pi pi-heart-fill',
-        command: () => router.push('/favourites')
+        command: () =>
+            router.push({
+                path: `/users/${currentUserId()}/favourites`,
+                query: { userName: currentUserName() }
+            })
     },
     {
         label: 'Profile',
@@ -29,7 +38,7 @@ const overlayMenuItems = ref([
     {
         label: 'Home',
         icon: 'pi pi-home',
-        to:'/'
+        to: '/'
     }
 ]);
 

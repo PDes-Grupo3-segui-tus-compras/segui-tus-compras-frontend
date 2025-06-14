@@ -1,4 +1,3 @@
-import { currentUserId } from '@/service/localStorageService';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -12,17 +11,26 @@ const router = createRouter({
         },
 
         {
-            path: '/purchases',
-            name: 'productPurchasesList',
-            component: () => import('@/views/pages/ProductListComponent.vue'),
-            meta: { requiresAuth: true, dataType: 'purchases', fetchedUserId: currentUserId()  }
-        },
-
-        {
-            path: '/favourites',
+            path: '/users/:userId/favourites',
             name: 'productFavouritesList',
             component: () => import('@/views/pages/ProductListComponent.vue'),
-            meta: { requiresAuth: true, dataType: 'favourites', fetchedUserId: currentUserId() }
+            props: (route) => ({
+                dataType: 'favourites',
+                fetchedUserId: Number(route.params.userId),
+                userName: route.query.userName || 'Unknown'
+            }),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/users/:userId/purchases',
+            name: 'productPurchasesList',
+            component: () => import('@/views/pages/ProductListComponent.vue'),
+            props: (route) => ({
+                dataType: 'purchases',
+                fetchedUserId: Number(route.params.userId),
+                userName: route.query.userName || 'Unknown'
+            }),
+            meta: { requiresAuth: true }
         },
 
         {
@@ -103,7 +111,7 @@ router.beforeEach((to, from, next) => {
         next({ name: 'login' });
     } else if (guestOnly && token) {
         next({ name: 'landing' });
-    } else if(adminOnly && permission !== "admin") {
+    } else if (adminOnly && permission !== 'admin') {
         next({ name: 'accessDenied' });
     } else {
         next();
