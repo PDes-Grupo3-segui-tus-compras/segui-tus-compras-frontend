@@ -1,3 +1,4 @@
+import { currentUserId } from '@/service/localStorageService';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -8,6 +9,20 @@ const router = createRouter({
             name: 'landing',
             component: () => import('@/views/pages/Landing.vue'),
             meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/purchases',
+            name: 'productPurchasesList',
+            component: () => import('@/views/pages/ProductListComponent.vue'),
+            meta: { requiresAuth: true, dataType: 'purchases', fetchedUserId: currentUserId()  }
+        },
+
+        {
+            path: '/favourites',
+            name: 'productFavouritesList',
+            component: () => import('@/views/pages/ProductListComponent.vue'),
+            meta: { requiresAuth: true, dataType: 'favourites', fetchedUserId: currentUserId() }
         },
 
         {

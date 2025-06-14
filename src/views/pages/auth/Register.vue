@@ -1,9 +1,9 @@
 <script setup>
-import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { register } from '@/service/authService';
 import BasicInput from '@/components/BasicInput.vue';
+import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
+import { register } from '@/service/authService';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -47,6 +47,9 @@ const handleRegister = async () => {
             password_confirmation: confirmPassword.value
         });
         localStorage.setItem('token', response.token);
+        localStorage.setItem('permission', response.user.user_type);
+        localStorage.setItem('userName', response.user.name);
+        localStorage.setItem('user', response.user.id);
         await router.push('/');
     } catch (error) {
         if (error.response && error.response.data.error) {

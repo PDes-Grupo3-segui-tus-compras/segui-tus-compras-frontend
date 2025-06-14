@@ -1,5 +1,6 @@
 <script setup>
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
+import ProductOpinionsCard from '@/components/ProductOpinionsCard.vue';
 import { getProductById } from '@/service/mercadoLibreService';
 import { favouriteProduct, getProductDataToSend, purchaseProduct } from '@/service/productService';
 import 'primeicons/primeicons.css';
@@ -7,7 +8,6 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import ProductOpinionsCard from '@/components/ProductOpinionsCard.vue';
 
 const route = useRoute();
 const product = ref(null);
