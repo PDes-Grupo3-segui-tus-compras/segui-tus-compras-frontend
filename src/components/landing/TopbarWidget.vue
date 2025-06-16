@@ -3,9 +3,48 @@ import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { logout } from '@/service/authService';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { currentUserId, currentUserName } from '@/service/localStorageService';
 
+const menu = ref(null);
 const route = useRoute();
 const router = useRouter();
+const overlayMenuItems = ref([
+    {
+        label: 'My purchases',
+        icon: 'pi pi-fw pi-shopping-cart',
+        command: () =>
+            router.push({
+                path: `/users/${currentUserId()}/purchases`,
+                query: { userName: currentUserName() }
+            })
+    },
+    {
+        label: 'My Favourites',
+        icon: 'pi pi-heart-fill',
+        command: () =>
+            router.push({
+                path: `/users/${currentUserId()}/favourites`,
+                query: { userName: currentUserName() }
+            })
+    },
+    {
+        label: 'Profile',
+        icon: 'pi pi-fw pi-user',
+        command: () => router.push('/profile')
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Home',
+        icon: 'pi pi-home',
+        to: '/'
+    }
+]);
+
+function toggleMenu(event) {
+    menu.value.toggle(event);
+}
 
 function smoothScroll(id) {
     const element = document.getElementById(id);
@@ -24,6 +63,7 @@ async function handleLogout() {
         await logout();
         localStorage.removeItem('token');
         localStorage.removeItem('permission');
+        localStorage.removeItem('userName');
         localStorage.removeItem('user');
         await router.push('/auth/login');
     } catch (error) {
@@ -49,6 +89,7 @@ function goToAdmin() {
 
 const hasToken = computed(() => !!localStorage.getItem('token'));
 const isAdmin = computed(() => localStorage.getItem('permission') === 'admin');
+const userName = computed(() => localStorage.getItem('userName'));
 </script>
 
 <template>
@@ -103,7 +144,8 @@ const isAdmin = computed(() => localStorage.getItem('permission') === 'admin');
             <Button v-if="!hasToken" label="Login" text as="router-link" to="/auth/login" rounded></Button>
             <Button v-if="!hasToken" label="Register" as="router-link" to="/auth/register" rounded></Button>
             <Button v-if="hasToken" label="Logout" :disabled="isLoggingOut" :class="{ 'disabled-button': isLoggingOut }" as="router-link" to="" rounded @click="handleLogout" />
-
+            <Menu ref="menu" :model="overlayMenuItems" :popup="true" />
+            <Button v-if="hasToken" :label="userName" icon="pi pi-fw pi-user" @click="toggleMenu" style="width: auto" />
             <FloatingConfigurator />
         </div>
     </div>

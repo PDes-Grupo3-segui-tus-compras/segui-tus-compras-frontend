@@ -1,9 +1,9 @@
 <script setup>
+import BasicInput from '@/components/BasicInput.vue';
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { computed, ref } from 'vue';
 import router from '@/router';
 import { login } from '@/service/authService';
-import BasicInput from '@/components/BasicInput.vue';
+import { computed, ref } from 'vue';
 
 // Attributes
 const email = ref('');
@@ -36,6 +36,7 @@ const handleLogin = async () => {
         });
         localStorage.setItem('token', response.token);
         localStorage.setItem('permission', response.user.user_type);
+        localStorage.setItem('userName', response.user.name);
         localStorage.setItem('user', response.user.id);
         await router.push('/');
     } catch (error) {

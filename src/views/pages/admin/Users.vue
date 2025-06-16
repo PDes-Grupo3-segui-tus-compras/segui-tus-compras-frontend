@@ -35,6 +35,20 @@ function initUserFilter() {
         email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] }
     };
 }
+
+function goToPurchases(user) {
+    router.push({
+        path: `/users/${user.id}/purchases`,
+        query: { userName: user.name }
+    });
+}
+
+function goToFavourites(user) {
+    router.push({
+        path: `/users/${user.id}/favourites`,
+        query: { userName: user.name }
+    });
+}
 </script>
 
 <template>
@@ -117,6 +131,14 @@ function initUserFilter() {
                                 </div>
                             </template>
                         </MultiSelect>
+                    </template>
+                </Column>
+                <Column header="Actions" style="min-width: 10rem; text-align: center">
+                    <template #body="{ data }">
+                        <div class="flex justify-center gap-2">
+                            <Button icon="pi pi-shopping-cart" class="custom-action-btn" rounded aria-label="View Purchases" @click="goToPurchases(data)" v-tooltip="'Go to purchases'" />
+                            <Button icon="pi pi-heart-fill" class="custom-action-btn" rounded aria-label="View Favourites" @click="goToFavourites(data)" v-tooltip="'Go to favourites'" />
+                        </div>
                     </template>
                 </Column>
             </DataTable>
