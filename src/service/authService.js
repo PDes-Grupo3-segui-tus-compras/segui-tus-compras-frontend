@@ -10,9 +10,7 @@ export const register = async (userData) => {
     return response.data;
 };
 
-export const logout = async () => {
-    const token = localStorage.getItem('token');
-
+export const logout = async (token) => {
     await axios.post('/logout', null, {
         headers: {
             Authorization: `Bearer ${token}`
