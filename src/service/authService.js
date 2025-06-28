@@ -10,8 +10,8 @@ export const register = async (userData) => {
     return response.data;
 };
 
-export const logout = async (token) => {
-    await axios.post('/logout', null, {
+export const logout = (token) => {
+    axios.post('/logout', null, {
         headers: {
             Authorization: `Bearer ${token}`
         }
