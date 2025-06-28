@@ -74,7 +74,7 @@ async function handleLogout() {
         localStorage.removeItem('permission');
         localStorage.removeItem('userName');
         localStorage.removeItem('user');
-        await logout(token);
+        logout(token);
         await router.push('/auth/login');
     } catch (error) {
         console.error('Error logging out', error);
@@ -160,12 +160,12 @@ const userName = computed(() => localStorage.getItem('userName'));
             </div>
         </div>
     </div>
-    
+
     <UserProfileDialog
         v-model:visible="shouldShowProfileDialog"
         :editable="isCurrentUser(profile.id)"
         :user="profile"
-    />    
+    />
 </template>
 
 <style scoped>
