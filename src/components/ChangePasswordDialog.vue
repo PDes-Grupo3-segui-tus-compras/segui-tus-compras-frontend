@@ -14,15 +14,18 @@ const modelVisible = computed({
 const oldPassword = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const oldPasswordTouched = ref(false);
 const passwordTouched = ref(false);
 const confirmPasswordTouched = ref(false);
 const submitted = ref(false);
 const errors = ref({
+    oldPassword: [],
     password: [],
     confirmPassword: []
 });
 
 function validatePassword() {
+    errors.value.oldPassword = [];
     errors.value.password = [];
     errors.value.confirmPassword = [];
 
@@ -40,24 +43,41 @@ function validatePassword() {
 function save() {
     submitted.value = true;
 
-    if (!validatePassword()) return;
-
+    if (!validatePassword()) {
+        errors.value.password.push('Old password do not match.');
+        return;
+    }
     emit('submit', {
         oldPassword: oldPassword.value,
         newPassword: password.value,
         new_password_confirmation: confirmPassword.value
     });
-
-    modelVisible.value = false;
 }
+
+function resetForm() {
+    oldPassword.value = '';
+    password.value = '';
+    confirmPassword.value = '';
+    oldPasswordTouched.value = false;
+    passwordTouched.value = false;
+    confirmPasswordTouched.value = false;
+    submitted.value = false;
+    errors.value = {
+        oldPassword: [],
+        password: [],
+        confirmPassword: []
+    };
+}
+
 </script>
 
 <template>
-    <Dialog v-model:visible="modelVisible" :style="{ width: '450px' }" header="Change Password" modal>
+    <Dialog v-model:visible="modelVisible" :style="{ width: '450px' }" header="Change Password" modal @hide="resetForm">
         <div class="flex flex-col gap-6">
             <div>
                 <label class="block font-bold mb-3">Old Password</label>
-                <InputText v-model="oldPassword" type="password" required autofocus />
+                <Password v-model="oldPassword" placeholder="oldPassword" :toggleMask="true" class="mb-2" :feedback="false" @blur="oldPasswordTouched = true" />
+                <p v-if="errors.oldPassword.length && oldPasswordTouched" class="text-red-500 text-sm">{{ errors.oldPassword.join(', ') }}</p>
             </div>
 
             <div>

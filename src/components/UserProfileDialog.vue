@@ -43,7 +43,7 @@ async function handlePasswordChange({ oldPassword, newPassword , new_password_co
             new_password: newPassword,
             new_password_confirmation: new_password_confirmation
         });
-
+        showChangePasswordDialog.value = false;
     } catch (error) {
         if (error.response && error.response.data.error) {
             backendErrors.value = {
