@@ -4,6 +4,8 @@ import { useToast } from 'primevue/usetoast';
 import { editOpinion, deleteOpinion } from '@/service/opinionService';
 import { computed, ref } from 'vue';
 import { isAdmin, isCurrentUser } from '@/service/localStorageService';
+import { fetchUserProfileById } from '@/service/userService';
+import UserProfileDialog from '@/components/UserProfileDialog.vue';
 
 const props = defineProps({
     opinion: {
@@ -17,9 +19,9 @@ const props = defineProps({
 });
 
 const isEditing = ref(false);
-
+const profile = ref({});
 const opinion = ref(props.opinion);
-
+const shouldShowProfileDialog = ref(false);
 const confirm = useConfirm();
 const toast = useToast();
 
@@ -111,6 +113,11 @@ async function handleEdit() {
     }
     isProcessingRequest.value = false;
 }
+
+async function openProfile(userId) {
+    profile.value = await fetchUserProfileById(userId);
+    shouldShowProfileDialog.value = true;
+}
 </script>
 
 <template>
@@ -122,7 +129,7 @@ async function handleEdit() {
             <div class="flex items-center gap-2">
                 <Avatar :label="opinion.user_name.charAt(0)" size="small" shape="circle" />
                 <div class="flex flex-col">
-                    <h5 class="font-medium cursor-pointer text-primary m-0">{{ opinion.user_name }}</h5>
+                    <h5 class="font-medium cursor-pointer text-primary m-0" @click="openProfile(opinion.user_id)">{{ opinion.user_name }}</h5>
                     <div class="flex flex-row gap-2 small text-500">
                         <span>{{ new Date(opinion.created_at).toLocaleString() }}</span>
                         <template v-if="opinion.created_at !== opinion.updated_at">
@@ -161,30 +168,7 @@ async function handleEdit() {
             </div>
         </form>
     </div>
+    <UserProfileDialog v-model:visible="shouldShowProfileDialog" :editable="isCurrentUser(profile.id)" :user="profile" />
 </template>
 
-<style scoped>
-.opinion-username {
-    color: #d0d0d0;
-    transition: 0.2s;
-}
-
-.opinion-username:hover {
-    color: #f3f3f3;
-    transition: 0.2s;
-}
-
-.small {
-    font-size: 0.8rem;
-}
-
-.opinion-username {
-    color: #d0d0d0;
-    transition: 0.2s;
-}
-
-.opinion-username:hover {
-    color: #f3f3f3;
-    transition: 0.2s;
-}
-</style>
+<style scoped></style>
