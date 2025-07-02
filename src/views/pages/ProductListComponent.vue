@@ -73,7 +73,7 @@ function goToProduct(productId) {
                                                     <div class="text-lg font-semibold text-color mb-2" style="-webkit-line-clamp: 2; -webkit-box-orient: vertical; display: -webkit-box; overflow: hidden">
                                                         {{ item.name }}
                                                     </div>
-                                                    <Button label="Details" class="w-full" @click="goToProduct(item.catalog_product_id)" />
+                                                    <Button  label="Details" class="w-full" @click="goToProduct(item.catalog_product_id)" />
                                                 </div>
                                             </div>
                                         </SplitterPanel>

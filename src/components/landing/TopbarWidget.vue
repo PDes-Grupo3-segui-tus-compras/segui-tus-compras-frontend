@@ -1,13 +1,17 @@
 <script setup>
-import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { logout } from '@/service/authService';
-import { currentUserId, currentUserName } from '@/service/localStorageService';
+import { currentUserId, currentUserName, isCurrentUser } from '@/service/localStorageService';
+import { fetchUserProfileById } from '@/service/userService';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import UserProfileDialog from '../UserProfileDialog.vue';
 
 const menu = ref(null);
 const route = useRoute();
 const router = useRouter();
+const shouldShowProfileDialog = ref(false);
+const profile = ref({});
+
 const overlayMenuItems = ref([
     {
         label: 'My purchases',
@@ -30,7 +34,7 @@ const overlayMenuItems = ref([
     {
         label: 'Profile',
         icon: 'pi pi-fw pi-user',
-        command: () => router.push('/profile')
+        command: () => openProfile()
     },
     {
         separator: true
@@ -42,6 +46,11 @@ const overlayMenuItems = ref([
             handleLogout()
     },
 ]);
+
+async function openProfile() {
+    profile.value = await fetchUserProfileById(currentUserId());
+    shouldShowProfileDialog.value = true;
+}
 
 function toggleMenu(event) {
     menu.value.toggle(event);
@@ -65,7 +74,7 @@ async function handleLogout() {
         localStorage.removeItem('permission');
         localStorage.removeItem('userName');
         localStorage.removeItem('user');
-        await logout(token);
+        logout(token);
         await router.push('/auth/login');
     } catch (error) {
         console.error('Error logging out', error);
@@ -151,7 +160,12 @@ const userName = computed(() => localStorage.getItem('userName'));
             </div>
         </div>
     </div>
-    
+
+    <UserProfileDialog
+        v-model:visible="shouldShowProfileDialog"
+        :editable="isCurrentUser(profile.id)"
+        :user="profile"
+    />
 </template>
 
 <style scoped>

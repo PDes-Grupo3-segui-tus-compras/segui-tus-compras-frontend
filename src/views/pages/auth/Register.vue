@@ -21,6 +21,7 @@ const defaultErrors = {
     password: [],
     confirmPassword: []
 };
+const loading = ref(false);
 const errors = computed(() => {
     if (backendErrors.value && Object.keys(backendErrors.value).length > 0) {
         return { ...defaultErrors, ...backendErrors.value };
@@ -39,6 +40,7 @@ const confirmPasswordTouched = ref(false);
 const handleRegister = async () => {
     backendErrors.value = {};
     if (Object.values(errors.value).some((errArray) => errArray.length > 0)) return;
+    loading.value = true;
     try {
         const response = await register({
             name: name.value,
@@ -58,9 +60,10 @@ const handleRegister = async () => {
                 ...(error.response?.data?.error || {})
             };
         }
+    } finally {
+        loading.value = false;
     }
 };
-
 </script>
 
 <template>
@@ -96,15 +99,15 @@ const handleRegister = async () => {
                         <span class="text-muted-color font-medium">Fill your info to register</span>
                     </div>
                     <div>
-                        <BasicInput v-model="name" label="Name" placeholder="Your name" :errors="errors.name" />
-                        <BasicInput v-model="email" type="email" label="Email" placeholder="Email" :errors="errors.email" />
+                        <BasicInput v-model="name" label="Name" placeholder="Your name" :errors="errors.name" :disabled="loading" />
+                        <BasicInput v-model="email" type="email" label="Email" placeholder="Email" :errors="errors.email" :disabled="loading" />
                         <label for="password" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mt-4 mb-2">Password</label>
-                        <Password id="password" v-model="password" placeholder="Password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="passwordTouched = true"></Password>
+                        <Password id="password" v-model="password" placeholder="Password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="passwordTouched = true" :disabled="loading"></Password>
                         <p v-if="errors.password.length && passwordTouched" class="text-red-500 text-sm">{{ errors.password.join(', ') }}</p>
                         <label for="confirmPassword" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mt-7 mb-2">Confirm Password</label>
-                        <Password id="confirmPassword" v-model="confirmPassword" placeholder="Confirm password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="confirmPasswordTouched = true"></Password>
+                        <Password id="confirmPassword" v-model="confirmPassword" placeholder="Confirm password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="confirmPasswordTouched = true" :disabled="loading"></Password>
                         <p v-if="errors.confirmPassword.length && confirmPasswordTouched" class="text-red-500 text-sm">{{ errors.confirmPassword.join(', ') }}</p>
-                        <Button label="Register" class="w-full mt-5" @click="handleRegister"></Button>
+                        <Button :label="loading ? '' : 'Register'" class="w-full mt-5" @click="handleRegister" :loading="loading" :disabled="loading"></Button>
                         <div class="mt-4 text-center">
                             <span class="text-muted-color">Already have an account?</span>
                             <router-link to="/auth/login" class="text-primary ml-2">Log in</router-link>

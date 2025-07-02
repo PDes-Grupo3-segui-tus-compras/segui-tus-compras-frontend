@@ -115,9 +115,28 @@ const favourite = async (event) => {
         </div>
     </div>
     <div class="pt-[5Rem]">
-        <div v-if="isLoading" class="flex flex-col items-center justify-center min-h-[60vh]">
-            <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="4" animationDuration=".8s" />
-            <span class="mt-4 text-color">Loading...</span>
+        <div v-if="isLoading" class="bg-surface-ground text-color flex justify-center items-start py-10 px-4">
+            <div class="card border-1 surface-border border-round-xl w-full max-w-[90rem] grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
+                <div class="card">
+                    <Skeleton height="400px" class="mb-3 w-full border-round" />
+                    <div class="flex gap-2 mt-2">
+                        <Skeleton width="60px" height="60px" class="border-round" v-for="n in 5" :key="n" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 px-4">
+                    <Skeleton width="80%" height="2rem" class="mt-6" />
+                    <Skeleton width="50%" height="2.5rem" />
+                    <Skeleton width="100%" height="6rem" />
+                    <div class="mt-4">
+                        <Skeleton width="60%" height="1.5rem" class="mb-2" />
+                        <Skeleton width="90%" height="1.2rem" class="mb-1" v-for="n in 3" :key="n" />
+                    </div>
+                    <div class="flex gap-4">
+                        <Skeleton width="100px" height="2rem" />
+                        <Skeleton width="180px" height="2.5rem" />
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-if="!isLoading">
             <div class="bg-surface-ground text-color flex justify-center items-start py-10 px-4">
