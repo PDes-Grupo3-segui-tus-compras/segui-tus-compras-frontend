@@ -62,19 +62,19 @@ const profileDialogWidth = () => {
                 <div class="flex items-center gap-2 text-surface-800 dark:text-surface-100">
                     <i class="pi pi-shopping-cart text-blue-400"></i>
                     <span>
-                        {{ user.purchases_count > 0 ? `${user.purchases_count} purchases made` : 'No purchases yet' }}
+                        {{ user.purchases_count > 0 ? `${user.purchases_count} Purchases made` : 'No purchases yet' }}
                     </span>
                 </div>
                 <div class="flex items-center gap-2 mt-2 text-surface-800 dark:text-surface-100">
                     <i class="pi pi-star text-yellow-400"></i>
                     <span>
-                        {{ user.favourites_count > 0 ? `${user.favourites_count} products favourited` : 'No favourites yet' }}
+                        {{ user.favourites_count > 0 ? `${user.favourites_count} Products favourited` : 'No favourites yet' }}
                     </span>
                 </div>
                 <div class="flex items-center gap-2 mt-2 text-surface-800 dark:text-surface-100">
                     <i class="pi pi-comment text-green-400"></i>
                     <span>
-                        {{ user.opinions_count > 0 ? `${user.opinions_count} opinions submitted` : 'No opinions yet' }}
+                        {{ user.opinions_count > 0 ? `${user.opinions_count} Opinions submitted` : 'No opinions yet' }}
                     </span>
                 </div>
             </div>
