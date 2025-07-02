@@ -1,14 +1,18 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
-import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import TopbarWidget from '@/components/landing/TopbarWidget.vue';
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { fetchUsers } from '@/service/userService';
+import TopbarWidget from '@/components/landing/TopbarWidget.vue';
+import UserProfileDialog from '@/components/UserProfileDialog.vue';
 import router from '@/router';
+import { stringToColor } from '@/service/colorService';
+import { fetchUserProfileById, fetchUsers } from '@/service/userService';
+import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
+import { onBeforeMount, onMounted, reactive, ref } from 'vue';
 
 const userFilter = ref(null);
 const userTypes = reactive(['user', 'admin']);
 const loading = ref(true);
+const profile = ref({});
+const shouldShowProfileDialog = ref(false);
 
 const users = ref([]);
 
@@ -48,6 +52,11 @@ function goToFavourites(user) {
         path: `/users/${user.id}/favourites`,
         query: { userName: user.name }
     });
+}
+
+async function openProfile(userId) {
+    profile.value = await fetchUserProfileById(userId);
+    shouldShowProfileDialog.value = true;
 }
 </script>
 
@@ -101,7 +110,7 @@ function goToFavourites(user) {
                     <template #body="{ data }">
                         <div class="flex items-center gap-3">
                             <Avatar v-if="data.image" :image="data.image" size="large" shape="circle"></Avatar>
-                            <Avatar v-else :label="data.name.charAt(0)" size="large" shape="circle"></Avatar>
+                            <Avatar v-else :label="data.name.charAt(0)" size="large" shape="circle" :style="{ backgroundColor: stringToColor(data.name), color: 'white' }"></Avatar>
                             <span>{{ data.name }}</span>
                         </div>
                     </template>
@@ -136,6 +145,7 @@ function goToFavourites(user) {
                 <Column header="Actions" style="min-width: 10rem; text-align: center">
                     <template #body="{ data }">
                         <div class="flex justify-center gap-2">
+                            <Button icon="pi pi-eye" class="custom-action-btn" rounded aria-label="View Profile" @click="openProfile(data.id)" v-tooltip="'Open profile'" />
                             <Button icon="pi pi-shopping-cart" class="custom-action-btn" rounded aria-label="View Purchases" @click="goToPurchases(data)" v-tooltip="'Go to purchases'" />
                             <Button icon="pi pi-heart-fill" class="custom-action-btn" rounded aria-label="View Favourites" @click="goToFavourites(data)" v-tooltip="'Go to favourites'" />
                         </div>
@@ -143,5 +153,6 @@ function goToFavourites(user) {
                 </Column>
             </DataTable>
         </div>
+        <UserProfileDialog v-model:visible="shouldShowProfileDialog" :editable="false" :user="profile" />
     </div>
 </template>

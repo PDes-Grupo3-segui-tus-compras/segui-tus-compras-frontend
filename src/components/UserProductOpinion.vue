@@ -1,11 +1,12 @@
 <script setup>
+import UserProfileDialog from '@/components/UserProfileDialog.vue';
+import { stringToColor } from '@/service/colorService';
+import { isAdmin, isCurrentUser } from '@/service/localStorageService';
+import { deleteOpinion, editOpinion } from '@/service/opinionService';
+import { fetchUserProfileById } from '@/service/userService';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
-import { editOpinion, deleteOpinion } from '@/service/opinionService';
 import { computed, ref } from 'vue';
-import { isAdmin, isCurrentUser } from '@/service/localStorageService';
-import { fetchUserProfileById } from '@/service/userService';
-import UserProfileDialog from '@/components/UserProfileDialog.vue';
 
 const props = defineProps({
     opinion: {
@@ -127,7 +128,7 @@ async function openProfile(userId) {
     <div v-if="!isEditing" class="px-3 py-2">
         <div class="opinion-header flex justify-between items-start mb-2 gap-3">
             <div class="flex items-center gap-2">
-                <Avatar :label="opinion.user_name.charAt(0)" size="small" shape="circle" />
+                <Avatar :label="opinion.user_name.charAt(0)" size="small" shape="circle" :style="{ backgroundColor: stringToColor(opinion.user_name), color: 'white' }"/>
                 <div class="flex flex-col">
                     <h5 class="font-medium cursor-pointer text-primary m-0" @click="openProfile(opinion.user_id)">{{ opinion.user_name }}</h5>
                     <div class="flex flex-row gap-2 small text-500">

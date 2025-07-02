@@ -1,6 +1,10 @@
 <script setup>
 import TopbarWidget from '@/components/landing/TopbarWidget.vue';
+import UserProfileDialog from '@/components/UserProfileDialog.vue';
+import router from '@/router';
 import { fetchMetrics } from '@/service/adminService';
+import { stringToColor } from '@/service/colorService';
+import { fetchUserProfileById } from '@/service/userService';
 import { computed, onMounted, ref } from 'vue';
 
 const menu = ref(null);
@@ -10,6 +14,9 @@ const isLoading = ref(true);
 const metricFavourites = ref([]);
 const metricProduct = ref([]);
 const metricType = ref('top5Users');
+const profile = ref({});
+const shouldShowProfileDialog = ref(false);
+
 const overlayMenuItems = ref([
     {
         label: 'Top 5 Users',
@@ -64,6 +71,11 @@ function goToProduct(productId) {
     router.push(`/products/${productId}`);
 };
 
+async function openProfile(userId) {
+    profile.value = await fetchUserProfileById(userId);
+    shouldShowProfileDialog.value = true;
+}
+
 onMounted(fetchData);
 
 </script>
@@ -106,7 +118,12 @@ onMounted(fetchData);
                                         <img :src="item.image" :alt="item.name" class="w-full rounded" />
                                     </div>
                                     <div v-else-if="metricType == 'top5Users'">
-                                        <Avatar :label="item.name.charAt(0)" size="large" shape="circle"></Avatar>
+                                        <Avatar
+                                            :label="item.name.charAt(0)"
+                                            size="large"
+                                            shape="circle"
+                                            :style="{ backgroundColor: stringToColor(item.name), color: 'white' }"
+                                            />
                                     </div>
                                     
                                 </div>
@@ -121,16 +138,18 @@ onMounted(fetchData);
                                 </div>
 
                                 <!-- Details Icon -->
-                                <Button icon="pi pi-eye" class="p-button-rounded p-button-sm bg-green-500 hover:bg-green-600 text-white border-none" @click="goToProduct(item.id)"
+                                <Button v-if="metricType === 'top5Purchases' || metricType === 'top5Favourites'" icon="pi pi-eye" class="p-button-rounded p-button-sm bg-green-500 hover:bg-green-600 text-white border-none" @click="goToProduct(item.catalog_product_id)"
                                 />
+                                <Button v-else-if="metricType === 'top5Users'" icon="pi pi-eye" class="p-button-rounded p-button-sm bg-green-500 hover:bg-green-600 text-white border-none" @click="openProfile(item.id)"
+                                />
+                                
                                 </div>
                             </div>
                             </template>
-
-                        
                     </DataView>
                 </div>
             </div>
+            <UserProfileDialog v-model:visible="shouldShowProfileDialog" :editable="false" :user="profile" />
         </div>
     </div>
 </template>
