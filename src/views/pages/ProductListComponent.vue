@@ -90,7 +90,7 @@ function goToProduct(productId) {
                                                 </div>
 
                                                 <template v-if="props.dataType === 'purchases'">
-                                                    <div class="mb-2"><strong>Purchased on:</strong> {{ new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(item.purchase_date)) }}</div>
+                                                    <div class="mb-2"><strong>Purchased on:</strong> {{ new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date(item.purchase_date + 'T12:00:00')) }}</div>
                                                     <div class="mb-2"><strong>Quantity:</strong> {{ item.quantity }}</div>
                                                     <div class="mb-2"><strong>Total:</strong> {{ item.quantity * item.price }}</div>
                                                 </template>
