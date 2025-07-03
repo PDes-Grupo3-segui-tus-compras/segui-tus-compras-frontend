@@ -1,9 +1,9 @@
 <script setup>
+import BasicInput from '@/components/BasicInput.vue';
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
-import { computed, ref } from 'vue';
 import router from '@/router';
 import { login } from '@/service/authService';
-import BasicInput from '@/components/BasicInput.vue';
+import { computed, ref } from 'vue';
 
 // Attributes
 const email = ref('');
@@ -25,10 +25,13 @@ const errors = computed(() => {
     };
 });
 
+const loading = ref(false);
+
 const handleLogin = async () => {
     backendErrorMessage.value = '';
     if (Object.values(errors.value).some((errArray) => errArray.length > 0)) return;
 
+    loading.value = true;
     try {
         const response = await login({
             email: email.value,
@@ -36,12 +39,15 @@ const handleLogin = async () => {
         });
         localStorage.setItem('token', response.token);
         localStorage.setItem('permission', response.user.user_type);
+        localStorage.setItem('userName', response.user.name);
         localStorage.setItem('user', response.user.id);
         await router.push('/');
     } catch (error) {
         if (error.response && error.response.status === 401) {
             backendErrorMessage.value = 'Incorrect email or password';
         }
+    } finally {
+        loading.value = false;
     }
 };
 </script>
@@ -75,12 +81,12 @@ const handleLogin = async () => {
                     </div>
 
                     <div>
-                        <BasicInput v-model="email" name="email" type="email" label="email" placeholder="Email" :errors="errors.email" />
+                        <BasicInput v-model="email" name="email" type="email" label="email" placeholder="Email" :errors="errors.email" :disabled="loading" />
                         <label for="password" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mt-4 mb-2">Password</label>
-                        <Password id="password" name="password" v-model="password" placeholder="Password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="passwordTouched = true" />
+                        <Password id="password" name="password" v-model="password" placeholder="Password" :toggleMask="true" class="mb-2" fluid :feedback="false" @blur="passwordTouched = true" :disabled="loading" />
                         <p v-if="errors.password.length && passwordTouched" class="text-red-500 text-sm">{{ errors.password.join(', ') }}</p>
 
-                        <Button label="Login" class="w-full mt-5" @click="handleLogin" data-cy="login-button"></Button>
+                        <Button :label="loading ? '' : 'Login'" class="w-full mt-5" @click="handleLogin" :loading="loading" :disabled="loading" data-cy="login-button" />
 
                         <p v-if="backendErrorMessage" class="text-red-500 text-center text-sm mt-4">{{ backendErrorMessage }}</p>
                     </div>
