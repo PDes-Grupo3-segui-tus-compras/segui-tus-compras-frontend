@@ -19,7 +19,7 @@ services:
       - app_network
 
   app:
-    image: segui-tus-compras-backend:test
+    image: ghcr.io/trejojulian/segui-tus-compras-backend:1.6
     container_name: laravel_app
     restart: unless-stopped
     working_dir: /var/www
@@ -65,7 +65,7 @@ services:
       - VITE_HOST=0.0.0.0
       - CHOKIDAR_USEPOLLING=true
     working_dir: /app
-    command: npm run dev 
+    command: npm run dev
 
   db:
     image: mysql:8
