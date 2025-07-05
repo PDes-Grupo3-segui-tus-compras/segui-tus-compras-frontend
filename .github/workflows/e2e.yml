@@ -14,6 +14,12 @@ jobs:
             - name: Checkout frontend
               uses: actions/checkout@v3
 
+            - name: Checkout backend
+              uses: actions/checkout@v3
+              with:
+                  repository: trejojulian/segui-tus-compras-backend
+                  path: docker/segui-tus-compras-backend
+
             - name: Set up Docker Compose
               run: |
                   docker compose -f docker/docker-compose.yml up -d --build
