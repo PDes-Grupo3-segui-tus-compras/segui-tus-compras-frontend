@@ -40,4 +40,4 @@ jobs:
 
             - name: Shutdown Docker
               if: always()
-              run: docker compose -f docker/docker-compose.ci.yml down
+              run: docker compose -f docker/docker-compose.yml down
