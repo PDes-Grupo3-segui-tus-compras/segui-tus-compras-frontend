@@ -67,7 +67,7 @@ async function openProfile(userId) {
             <TopbarWidget />
         </div>
     </div>
-    <div class="pt-32 px-6 lg:px-20">
+    <div class="pt-32 px-6 lg:px-20 pb-5">
         <div class="card">
             <div class="font-semibold text-xl mb-4">Users</div>
             <DataTable

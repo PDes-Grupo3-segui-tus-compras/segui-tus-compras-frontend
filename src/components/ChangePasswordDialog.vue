@@ -62,10 +62,9 @@ function validatePassword() {
         errors.value.confirmNewPassword.push('Please confirm new password');
     }
 
-    if (newPassword.value.length < 6) {
-        errors.value.newPassword.push('Password must be at least 6 characters');
+    if (newPassword.value.length < 8) {
+        errors.value.newPassword.push('Password must be at least 8 characters');
     }
-    
 
     if (newPassword.value !== confirmNewPassword.value) {
         errors.value.confirmNewPassword.push('Passwords do not match');
