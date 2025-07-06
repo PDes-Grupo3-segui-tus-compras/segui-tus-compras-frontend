@@ -6,7 +6,8 @@
         "build": "vite build",
         "preview": "vite preview",
         "lint": "eslint --fix . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-        "cy:open": "cypress open"
+        "cy:open": "cypress open",
+        "test:e2e": "cypress run"
     },
     "dependencies": {
         "@primeuix/themes": "^1.0.0",

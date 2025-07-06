@@ -1,0 +1,58 @@
+name: E2E Tests
+
+on:
+    pull_request:
+        branches: ["dev"]
+    push:
+        branches: ["dev"]
+
+jobs:
+    cypress-e2e:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout frontend
+              uses: actions/checkout@v3
+
+            - name: Checkout backend
+              uses: actions/checkout@v3
+              with:
+                  repository: trejojulian/segui-tus-compras-backend
+                  path: docker/segui-tus-compras-backend
+
+            - name: Set up Docker Compose
+              run: |
+                  docker compose -f docker/docker-compose.yml up -d --build
+
+            - name: Wait for backend and frontend
+              run: |
+                  echo "Waiting for services to be up..."
+                  until curl -s http://localhost:8000 > /dev/null; do echo "Waiting for backend..."; sleep 5; done
+                  until curl -s http://localhost:5173 > /dev/null; do echo "Waiting for frontend..."; sleep 5; done
+
+            - name: Wait for MySQL
+              run: |
+                  until docker exec mysql_db mysqladmin ping -h localhost --silent; do
+                    echo "Waiting for MySQL to be ready..."
+                    sleep 3
+                  done
+            - name: Run migrations
+              run: docker exec laravel_app php artisan migrate --force
+
+            - name: Run Seeder for test user
+              run: docker exec laravel_app php artisan db:seed --class=UsersSeeder
+
+            - name: Install Node.js and Cypress deps
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - run: npm ci
+            - run: npx cypress install
+
+            - name: Run Cypress tests
+              run: npm run test:e2e
+
+            - name: Shutdown Docker
+              if: always()
+              run: docker compose -f docker/docker-compose.yml down
