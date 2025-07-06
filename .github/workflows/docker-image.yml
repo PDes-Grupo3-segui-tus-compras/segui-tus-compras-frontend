@@ -15,8 +15,8 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --tag ghcr.io/TrejoJulian/segui-tus-compras-frontend:latest
+      run: docker build . --tag ghcr.io/trejoJulian/segui-tus-compras-frontend:latest
     - name: push image to githubregistry
       run: |
         echo "${{ secrets.SEGUI_TUS_COMPRAS_TOKEN }}" | docker login ghcr.io -u TrejoJulian --password-stdin
-        docker push ghcr.io/TrejoJulian/segui-tus-compras-frontend:latest
+        docker push ghcr.io/trejoJulian/segui-tus-compras-frontend:latest
