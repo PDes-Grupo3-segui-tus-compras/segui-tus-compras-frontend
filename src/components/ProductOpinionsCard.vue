@@ -89,7 +89,6 @@ async function sendOpinion() {
     if (formErrors.value.opinion == null && formErrors.value.rating == null) {
         try {
             const publishedOpinion = await publishOpinion({ ...getProductDataToSend(product), content: opinionStructure.value.opinion, rating: opinionStructure.value.rating });
-            console.log(publishedOpinion);
             opinions.value.push(publishedOpinion);
             isSearchingOpinions.value = true;
             showOpinionForm.value = false;
