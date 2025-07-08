@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=PDes-Grupo3-segui-tus-compras_segui-tus-compras-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=PDes-Grupo3-segui-tus-compras_segui-tus-compras-frontend)
 # Segui tus compras:
 
 ## Tecnologias
