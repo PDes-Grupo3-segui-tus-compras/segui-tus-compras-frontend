@@ -8,6 +8,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const route = useRoute();
 const product = ref(null);
@@ -24,10 +25,13 @@ onMounted(async () => {
     try {
         isLoading.value = true;
         product.value = await getProductById({ product_id: productId });
+        if (Object.keys(product.value).length === 0) {
+            await router.push('pages/notFound');
+        }
     } catch (error) {
         console.error(error);
         errorMessage.value = 'Error loading product.';
-        //TODO: Llevarlo a la pagina de error 404
+        await router.push('pages/notFound');
     } finally {
         isLoading.value = false;
     }

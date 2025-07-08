@@ -52,7 +52,7 @@ function goToProduct(productId) {
             <span class="mt-4 text-color">Loading {{ props.dataType }}...</span>
         </div>
 
-        <div v-else class="max-w-screen-xl mx-auto flex flex-col px-4">
+        <div v-else class="flex flex-col pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 pb-5">
             <div class="card">
                 <h2 class="text-xl font-semibold text-color mb-4">{{ props.dataType === 'favourites' ? 'Favourites' : 'Purchases' }} from {{ props.userName }}</h2>
 
