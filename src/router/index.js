@@ -73,6 +73,12 @@ const router = createRouter({
         },
 
         {
+            path: '/answer',
+            name: 'answer',
+            component: () => import('@/views/pages/Oracle.vue')
+        },
+
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('@/views/pages/admin/Admin.vue'),
