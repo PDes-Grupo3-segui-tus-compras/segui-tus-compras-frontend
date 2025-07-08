@@ -58,7 +58,7 @@ const isLoading = ref(false);
                                     </div>
                                     <div class="flex flex-col justify-between flex-grow mt-6">
                                         <div class="mb-6">
-                                            <div class="text-lg font-medium leading-snug h-[3.5rem] overflow-hidden" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical">
+                                            <div class="text-lg font-medium line-clamp-2">
                                                 {{ item.name }}
                                             </div>
                                         </div>

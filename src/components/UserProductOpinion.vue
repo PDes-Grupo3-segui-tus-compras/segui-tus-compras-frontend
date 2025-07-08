@@ -169,7 +169,7 @@ async function openProfile(userId) {
             </div>
         </form>
     </div>
-    <UserProfileDialog v-model:visible="shouldShowProfileDialog" :editable="isCurrentUser(profile.id)" :user="profile" />
+    <UserProfileDialog v-model:visible="shouldShowProfileDialog" :editable="false" :user="profile" />
 </template>
 
 <style scoped></style>

@@ -93,6 +93,10 @@ function goHome() {
     router.push('/');
 }
 
+function oracle() {
+    router.push('/answer');
+}
+
 function goToAdmin() {
     router.push(`/admin/`);
 }
@@ -148,6 +152,11 @@ const userName = computed(() => localStorage.getItem('userName'));
                 <li>
                     <a v-if="isAdmin" href="#" @click="goToAdmin()" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                         <span>Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a @click="oracle()" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
+                        <span>Oracle</span>
                     </a>
                 </li>
             </ul>
