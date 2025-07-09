@@ -137,7 +137,7 @@ const userName = computed(() => localStorage.getItem('userName'));
         >
             <i class="pi pi-bars !text-2xl"></i>
         </Button>
-        <div class="items-center bg-surface-0 bg-transparent grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
+        <div class="items-center bg-white dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border shadow-lg lg:shadow-none">
             <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8">
                 <li>
                     <a @click="goToSection('hero')" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
