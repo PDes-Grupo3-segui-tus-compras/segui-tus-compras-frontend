@@ -13,19 +13,22 @@ const usersImage = 'https://cdn3.iconfinder.com/data/icons/yuai-user-interface-v
             <TopbarWidget />
         </div>
     </div>
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="flex gap-8">
-            <div class="flex flex-col h-full items-center justify-between rounded-[56px] p-[0.3rem]" style="background: linear-gradient(180deg, rgba(233, 30, 99, 0.4) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="flex flex-col justify-between items-center bg-surface-0 dark:bg-surface-900 h-full px-8 sm:px-20 py-20 rounded-[53px] w-[400px]">
-                    <img :src="usersImage" alt="Users" class="mb-8 object-contain" style="width: 300px; height: 250px; filter: invert(33%) sepia(77%) saturate(454%) hue-rotate(153deg) brightness(97%) contrast(85%)" />
-                    <span class="text-muted-color mb-8">Users</span>
+
+    <div class="flex items-center justify-center min-h-screen px-4 pt-20 lg:pt-0">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="flex flex-col h-full items-center justify-between rounded-[56px] p-[0.3rem]"
+                 style="background: linear-gradient(180deg, rgba(233, 30, 99, 0.4) 10%, rgba(33, 150, 243, 0) 30%)">
+                <div class="flex flex-col justify-between items-center bg-surface-0 dark:bg-surface-900 h-full px-6 sm:px-10 py-10 rounded-[53px]">
+                    <img :src="usersImage" alt="Users" class="mb-8  object-contain w-[400px]"
+                         style="filter: invert(33%) sepia(77%) saturate(454%) hue-rotate(153deg) brightness(97%) contrast(85%)" />
                     <Button as="router-link" label="Go to Users" to="/admin/users" />
                 </div>
             </div>
-            <div class="flex flex-col h-full items-center justify-between rounded-[56px] p-[0.3rem]" style="background: linear-gradient(180deg, rgba(233, 30, 99, 0.4) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="flex flex-col justify-between items-center bg-surface-0 dark:bg-surface-900 h-full px-8 sm:px-20 py-20 rounded-[53px] w-[400px]">
-                    <img :src="metricsImage" alt="Metrics" class="mb-8 object-contain" style="width: 300px; height: 250px; filter: invert(33%) sepia(77%) saturate(454%) hue-rotate(153deg) brightness(97%) contrast(85%)" />
-                    <span class="text-muted-color mb-8">Metrics</span>
+            <div class="flex flex-col h-full items-center justify-between rounded-[56px] p-[0.3rem]"
+                 style="background: linear-gradient(180deg, rgba(233, 30, 99, 0.4) 10%, rgba(33, 150, 243, 0) 30%)">
+                <div class="flex flex-col justify-between items-center bg-surface-0 dark:bg-surface-900 h-full px-6 sm:px-10 py-10 rounded-[53px]">
+                    <img :src="metricsImage" alt="Metrics" class="mb-8  object-contain w-[400px]"
+                         style="filter: invert(33%) sepia(77%) saturate(454%) hue-rotate(153deg) brightness(97%) contrast(85%)" />
                     <Button as="router-link" label="Go to Metrics" to="/admin/metrics" />
                 </div>
             </div>
