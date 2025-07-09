@@ -130,7 +130,10 @@ async function openProfile(userId) {
             <div class="flex items-center gap-2">
                 <Avatar :label="opinion.user_name.charAt(0)" size="small" shape="circle" :style="{ backgroundColor: stringToColor(opinion.user_name), color: 'white' }"/>
                 <div class="flex flex-col">
-                    <h5 class="font-medium cursor-pointer text-primary m-0" @click="openProfile(opinion.user_id)">{{ opinion.user_name }}</h5>
+                    <div class="flex flex-row">
+                        <h5 class="font-medium cursor-pointer text-primary m-0 pr-5" @click="openProfile(opinion.user_id)">{{ opinion.user_name }}</h5>
+                        <Rating readonly v-model="opinion.rating" :cancel="false" class="m-0 p-0" />
+                    </div>
                     <div class="flex flex-row gap-2 small text-500">
                         <span>{{ new Date(opinion.created_at).toLocaleString() }}</span>
                         <template v-if="opinion.created_at !== opinion.updated_at">
