@@ -154,11 +154,11 @@ const userName = computed(() => localStorage.getItem('userName'));
                         <span>Admin</span>
                     </a>
                 </li>
-                <!--<li>
+                <li>
                     <a @click="oracle()" class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl cursor-pointer hover:opacity-90">
                         <span>Oracle</span>
                     </a>
-                </li>-->
+                </li>
             </ul>
             <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2">
                 <Button v-if="!hasToken" label="Login" text as="router-link" to="/auth/login" rounded />
